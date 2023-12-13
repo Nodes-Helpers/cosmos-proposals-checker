@@ -1,0 +1,123 @@
+# A path to a file that will store the state of the app.
+state-path = "/root/cosmos-proposals-checker/cosmos-proposals-checker-state.json"
+# A path to a file that will store mutes of this app. Omitting it will disable the mute functionality.
+mutes-path = ""
+# Interval to check and notify.
+# Can be a cron-like interval (like "0 * * * *" for every hour),
+# "@hourly"/"@daily" for hourly/daily intervals, or "@every 1h"
+# for specifying intervals more granularly.
+# See https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc#hdr-CRON_Expression_Format for examples.
+# Defaults to "@hourly"
+interval = "@every 144h"
+
+# Logging configuration
+[log]
+# Log level. Defaults to "info". Set it to "debug" or "trace" to add more verbosity and for debugging.
+level = "trace"
+# Whether to write all logs in JSON instead of pretty-printing. Useful if you use a centralised logging
+# solition, like ELK. Defaults to false.
+json = false
+
+# Per-chain config. There can be multiple chains.
+[[chains]]
+# Chain name, used internally. Required. Should be unique.
+name = "KYVE"
+# Pretty name that is used when reporting. Optional.
+pretty-name = "KYVE\n@Infinitix8"
+# Chain name in Keplr wallet, to generate links to a proposal. Optional.
+keplr-name = "KYVE"
+# Mintscan prefix, to generate links to a proposal/wallet. Optional.
+mintscan-prefix = "kyve"
+# List of LCD endpoints to get data from. At least 1 is required. You can use
+# multiple LCD endpoints, in case a single one fails.
+lcd-endpoints = ["https://api-eu-1.kyve.network"]
+# List of wallets to monitor. At least 1 is required.
+wallets = [
+    # Each wallet can have an address (required) and an alias (optional).
+    { address = "kyve1n48jy4ztg53qlcjjxxn2x2kw46zge3sse6marv", alias = "KYVE validator wallet" }
+]
+# Some chains have a new proposals structure (v1) compared to an older one (v1beta1),
+# when there are 2 or more actual proposals inside a single one (namely, Quicksilver).
+# On such chains, querying proposals with an older endpoint when there are proposals
+# with 2 or more proposals inside causes an error like this:
+# "codespace sdk code 29: invalid type: can't convert a gov/v1 Proposal to gov/v1beta1 Proposal
+# when amount of proposal messages is more than one". If you see this error, consider switching to
+# a newer endpoint. Keep in mind that some chains do not implement the newer format.
+# The possible values are: "v1" (newer format), "v1beta1" (older format).
+# Defaults to "v1beta1"
+proposals-type = "v1"
+# Custom explorer links patterns. They are overridden if mintscan-prefix is specified.
+
+[chains.explorer]
+# A pattern for proposal link for explorer, if there's no Mintscan support
+# for the chain, but there is a custom explorer. %s is replaced by the proposal ID.
+# Also optional.
+proposal-link-pattern = "https://mintscan.io/kyve/proposals/%s"
+# A pattern for wallet links for the explorer. Also optional.
+wallet-link-pattern = "https://mintscan.io/kyve/address/%s"
+
+###### Entangle ######
+
+[[chains]]
+name = "Entangle"
+pretty-name = "Entangle\n@Infinitix8"
+keplr-name = "Entangle"
+mintscan-prefix = ""
+lcd-endpoints = ["https://entangle-testnet-api.itrocket.net"]
+wallets = [
+    { address = "ethm17x53rzxg4ndmj0en2zf00vld39y576kyp2krxp", alias = "Entangle validator wallet" }
+]
+proposals-type = "v1beta1"
+
+[chains.explorer]
+proposal-link-pattern = "https://testnet.itrocket.net/entangle/gov/%s"
+wallet-link-pattern = "https://testnet.itrocket.net/entangle/account/%s"
+
+###### Babylon ######
+
+[[chains]]
+name = "Babylon"
+pretty-name = "Babylon\n@Infinitix8"
+keplr-name = "Babylon"
+mintscan-prefix = ""
+lcd-endpoints = ["http://91.229.245.140:1317"]
+wallets = [
+    { address = "bbn1s9c6j9wl088xxyaud80m2zzsqh9483nkm4609s", alias = "Babylon validator wallet" }
+]
+proposals-type = "v1beta1"
+
+[chains.explorer]
+proposal-link-pattern = "https://babylon.explorers.guru/proposals/%s"
+wallet-link-pattern = "https://babylon.explorers.guru/account/%s"
+
+###### Tenet ######
+
+[[chains]]
+name = "Tenet"
+pretty-name = "Tenet\n@Infinitix8"
+keplr-name = "Tenet"
+mintscan-prefix = ""
+lcd-endpoints = ["http://164.68.113.166:1317"]
+wallets = [
+    { address = "tenet1rjd6u2g6nlkys0tcas0ayj7m28yrmvq0ctmzqm", alias = "Tenet validator wallet" }
+]
+proposals-type = "v1beta1"
+
+[chains.explorer]
+proposal-link-pattern = "https://tenet.explorers.guru/proposals/%s"
+wallet-link-pattern = "https://tenet.explorers.guru/account/%s"
+
+# PagerDuty notifier config.
+[pagerduty]
+# PagerDuty URL. You may need to override it if you use EU version of Pagerduty.
+# Defaults to "https://events.pagerduty.com"
+url = "https://events.eu.pagerduty.com"
+# PagerDuty API key. If omitted, the PagerDuty reporter will be disabled.
+api-key = ""
+
+# Telegram notifier config.
+[telegram]
+# Telegram bot token. If omitted, the Telegram reporter will be disabled.
+token = ""
+# Chat ID to write to. Check README for integration info.
+chat = 
